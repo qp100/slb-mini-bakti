@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
+import ConfirmModal from '../components/ConfirmModal'
 import { Trash2, Users } from 'lucide-react'
 
 const GuruPage = () => {
@@ -12,6 +13,7 @@ const GuruPage = () => {
   const [guruList, setGuruList] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [modal, setModal] = useState({ open: false, id: null, nama: '' })
 
   useEffect(() => {
     fetchGuru()
@@ -63,14 +65,18 @@ const GuruPage = () => {
     }
   }
 
-  const handleHapus = async (id) => {
-    if (!window.confirm('Yakin ingin menghapus data guru ini?')) return
+  const openModal = (id, nama) => setModal({ open: true, id, nama })
+  const closeModal = () => setModal({ open: false, id: null, nama: '' })
+
+  const handleHapus = async () => {
     try {
-      const { error } = await supabase.from('guru').delete().eq('id', id)
+      const { error } = await supabase.from('guru').delete().eq('id', modal.id)
       if (error) throw error
+      closeModal()
       await fetchGuru()
     } catch (err) {
       console.error('Error deleting guru:', err)
+      closeModal()
       alert('Gagal menghapus data.')
     }
   }
@@ -171,7 +177,7 @@ const GuruPage = () => {
                   <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center">
                     <button
                       id={`btn-hapus-guru-${row.id}`}
-                      onClick={() => handleHapus(row.id)}
+                      onClick={() => openModal(row.id, row.nama)}
                       className="bg-red-500 text-white px-2.5 sm:px-3 py-1 rounded-lg text-xs sm:text-sm hover:bg-red-600 active:scale-95 transition-all flex items-center gap-1 mx-auto whitespace-nowrap"
                     >
                       <Trash2 size={12} />
@@ -184,6 +190,14 @@ const GuruPage = () => {
           </table>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={modal.open}
+        title="Hapus Data Guru"
+        message={`Nama Guru: ${modal.nama}`}
+        onConfirm={handleHapus}
+        onCancel={closeModal}
+      />
     </div>
   )
 }

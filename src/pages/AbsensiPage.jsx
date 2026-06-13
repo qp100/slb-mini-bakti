@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import StatusBadge from '../components/StatusBadge'
+import ConfirmModal from '../components/ConfirmModal'
 import { Trash2, UserCheck } from 'lucide-react'
 
 const KELAS_OPTIONS = ['Kelas 1', 'Kelas 2', 'Kelas 3', 'Kelas 4', 'Kelas 5', 'Kelas 6']
@@ -16,6 +17,7 @@ const AbsensiPage = () => {
   const [absensiList, setAbsensiList] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [modal, setModal] = useState({ open: false, id: null, nama: '' })
 
   useEffect(() => {
     fetchAbsensi()
@@ -70,14 +72,18 @@ const AbsensiPage = () => {
     }
   }
 
-  const handleHapus = async (id) => {
-    if (!window.confirm('Yakin ingin menghapus data absensi ini?')) return
+  const openModal = (id, nama) => setModal({ open: true, id, nama })
+  const closeModal = () => setModal({ open: false, id: null, nama: '' })
+
+  const handleHapus = async () => {
     try {
-      const { error } = await supabase.from('absensi').delete().eq('id', id)
+      const { error } = await supabase.from('absensi').delete().eq('id', modal.id)
       if (error) throw error
+      closeModal()
       await fetchAbsensi()
     } catch (err) {
       console.error('Error deleting absensi:', err)
+      closeModal()
       alert('Gagal menghapus data.')
     }
   }
@@ -186,7 +192,7 @@ const AbsensiPage = () => {
                   <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center">
                     <button
                       id={`btn-hapus-absensi-${row.id}`}
-                      onClick={() => handleHapus(row.id)}
+                      onClick={() => openModal(row.id, row.nama)}
                       className="bg-red-500 text-white px-2.5 sm:px-3 py-1 rounded-lg text-xs sm:text-sm hover:bg-red-600 active:scale-95 transition-all flex items-center gap-1 mx-auto whitespace-nowrap"
                     >
                       <Trash2 size={12} />
@@ -199,6 +205,14 @@ const AbsensiPage = () => {
           </table>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={modal.open}
+        title="Hapus Data Absensi"
+        message={`Nama Siswa: ${modal.nama}`}
+        onConfirm={handleHapus}
+        onCancel={closeModal}
+      />
     </div>
   )
 }
