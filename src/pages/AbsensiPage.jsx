@@ -83,23 +83,23 @@ const AbsensiPage = () => {
   }
 
   const inputClass =
-    'w-full p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-300 text-sm transition-shadow'
+    'w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-300 text-sm transition-shadow'
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
+    <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-5">
-        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-          <UserCheck size={20} className="text-[#3f6db3]" />
+      <div className="flex items-center gap-3 mb-4 sm:mb-5">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+          <UserCheck size={18} className="text-[#3f6db3]" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-gray-800">Absensi Siswa</h1>
+          <h1 className="text-base sm:text-lg font-bold text-gray-800">Absensi Siswa</h1>
           <p className="text-xs text-gray-500">Catat kehadiran siswa hari ini</p>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-5">
+      {/* Form — 1 kolom di mobile, 2 di sm, 3 di md, 5 di lg */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-5">
         <input
           id="input-nama"
           type="text"
@@ -144,52 +144,52 @@ const AbsensiPage = () => {
           id="btn-simpan-absensi"
           onClick={handleSimpan}
           disabled={saving}
-          className="w-full bg-green-500 text-white px-4 py-3 rounded-lg font-bold hover:bg-green-600 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+          className="w-full bg-green-500 text-white px-4 py-2.5 sm:py-3 rounded-lg font-bold hover:bg-green-600 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed text-sm sm:col-span-2 md:col-span-1"
         >
           {saving ? 'Menyimpan...' : 'Simpan'}
         </button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Table dengan scroll horizontal */}
+      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
         {loading ? (
-          <p className="text-gray-400 text-center py-8">Memuat data...</p>
+          <p className="text-gray-400 text-center py-8 text-sm">Memuat data...</p>
         ) : absensiList.length === 0 ? (
           <div className="text-center py-12">
             <UserCheck size={40} className="text-gray-300 mx-auto mb-2" />
-            <p className="text-gray-400">Belum ada data absensi</p>
+            <p className="text-gray-400 text-sm">Belum ada data absensi</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full text-xs sm:text-sm min-w-[560px]">
             <thead>
               <tr>
-                <th className="bg-gray-100 p-3 text-center font-semibold text-gray-600 rounded-l-lg">No</th>
-                <th className="bg-gray-100 p-3 text-left font-semibold text-gray-600">Nama</th>
-                <th className="bg-gray-100 p-3 text-center font-semibold text-gray-600">NIS</th>
-                <th className="bg-gray-100 p-3 text-center font-semibold text-gray-600">Kelas</th>
-                <th className="bg-gray-100 p-3 text-center font-semibold text-gray-600">Status</th>
-                <th className="bg-gray-100 p-3 text-center font-semibold text-gray-600">Jam</th>
-                <th className="bg-gray-100 p-3 text-center font-semibold text-gray-600 rounded-r-lg">Aksi</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-center font-semibold text-gray-600 rounded-l-lg w-10">No</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-left font-semibold text-gray-600">Nama</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-center font-semibold text-gray-600">NIS</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-center font-semibold text-gray-600">Kelas</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-center font-semibold text-gray-600">Status</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-center font-semibold text-gray-600">Jam</th>
+                <th className="bg-gray-100 p-2.5 sm:p-3 text-center font-semibold text-gray-600 rounded-r-lg">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {absensiList.map((row, idx) => (
                 <tr key={row.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="p-3 border-t border-gray-100 text-center text-gray-500">{idx + 1}</td>
-                  <td className="p-3 border-t border-gray-100 font-medium text-gray-800">{row.nama}</td>
-                  <td className="p-3 border-t border-gray-100 text-center text-gray-600">{row.nis}</td>
-                  <td className="p-3 border-t border-gray-100 text-center text-gray-600">{row.kelas}</td>
-                  <td className="p-3 border-t border-gray-100 text-center">
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center text-gray-500">{idx + 1}</td>
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 font-medium text-gray-800 whitespace-nowrap">{row.nama}</td>
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center text-gray-600">{row.nis}</td>
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center text-gray-600 whitespace-nowrap">{row.kelas}</td>
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center">
                     <StatusBadge status={row.status} />
                   </td>
-                  <td className="p-3 border-t border-gray-100 text-center text-gray-600">{row.jam}</td>
-                  <td className="p-3 border-t border-gray-100 text-center">
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center text-gray-600">{row.jam}</td>
+                  <td className="p-2.5 sm:p-3 border-t border-gray-100 text-center">
                     <button
                       id={`btn-hapus-absensi-${row.id}`}
                       onClick={() => handleHapus(row.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-600 active:scale-95 transition-all flex items-center gap-1 mx-auto"
+                      className="bg-red-500 text-white px-2.5 sm:px-3 py-1 rounded-lg text-xs sm:text-sm hover:bg-red-600 active:scale-95 transition-all flex items-center gap-1 mx-auto whitespace-nowrap"
                     >
-                      <Trash2 size={13} />
+                      <Trash2 size={12} />
                       Hapus
                     </button>
                   </td>
